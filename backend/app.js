@@ -8,7 +8,6 @@ const port = 9000;
 
 const jsonParser = express.json();
 
-
 const cors = require('cors');
 app.use(cors());
 
@@ -49,23 +48,30 @@ app.post('/spotify-access-token/', jsonParser, (req, res) => {
             spotifyApi.setAccessToken(data.body['access_token'])
             spotifyApi.setRefreshToken(data.body['refresh_token']);
 
-            // For now sends nothing back but need to make it send email to verify login
+            spotifyApi.getMe()
+                .then((data) => res.send(data.body)) // This is way more than necessary and should be fixed
+                .catch((err) => {
+                    console.log('Something went wrong!', err);
+                    res.send(err);
+                });
         }, 
         (err) => {
-            console.log('Something.went wrong!', err);
+            console.log(err, req);
         });
 
 });
 
 app.get('/recently-played', (req, res) => {
+
     spotifyApi.getMyRecentlyPlayedTracks({
         limit: 20
-    }).then((data) => {
-        res.send(data.body);
-    }).catch((err) => {
-        console.log('Something went wrong!', err);
-        res.send(err);
     })
+        .then((data) => res.send(data.body))
+        .catch((err) => {
+            console.log('Something went wrong!', err);
+            res.send(err);
+        })
+
 });
 
 app.listen(port, () => {
