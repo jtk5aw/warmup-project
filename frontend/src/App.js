@@ -28,6 +28,8 @@ export default function App() {
 
   // Server URLs to use
   let recentlyPlayed = 'http://localhost:9000/recently-played';
+  let currentlyPlaying = 'http://localhost:9000/currently-playing';
+  let getAlbum = 'http://localhost:9000/album';
   let beginAuthorize = 'http://localhost:9000/spotify-authorize';
   let completeAuthorize = 'http://localhost:9000/spotify-access-token';
 
@@ -53,6 +55,7 @@ export default function App() {
       })
         .then(response => response.json())
         .then(data => {
+          console.log(data);
           setDisplayName(data['display_name']);
           history.push('/');
         })
@@ -81,6 +84,9 @@ export default function App() {
 
   }
 
+  // Note: These aren't being consolidated because they will not be here forever
+  // This is not permanent functionality
+
   const handleRecentlyPlayedClick = () => {
     fetch(recentlyPlayed)
       .then(response => response.json())
@@ -92,15 +98,45 @@ export default function App() {
       })
   }
 
+  const handleCurrentlyPlayingClick = () => {
+    fetch(currentlyPlaying) 
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log('There was an error fetching recently played: ' + err);
+      })
+  }
+
+  const handleGetAlbumClick = () => {
+    fetch(getAlbum)
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log('There was an error fetchign recently played: ' + err);
+      })
+  }
+
   return (
     <Container className="App" fluid>
       <Row className="App-header">
         <Image src={logo} className="App-logo m-2" alt="logo" />
         {displayName 
         ? 
-        <Button className="m-2" style={{backgroundColor: '#61dafb'}} size='lg' onClick={handleRecentlyPlayedClick}>
-          Fetch Recently Played
-        </Button>
+        <Container>
+          <Button className="m-2" style={{backgroundColor: '#61dafb'}} size='lg' onClick={handleRecentlyPlayedClick}>
+            Fetch Recently Played
+          </Button>
+          <Button className="m-2" style={{backgroundColor: '#61dafb'}} size='lg' onClick={handleCurrentlyPlayingClick}>
+            Fetch Currently Playing
+          </Button>
+          <Button className="m-2" style={{backgroundColor: '#61dafb'}} size='lg' onClick={handleGetAlbumClick}>
+            Get Album
+          </Button>
+        </Container>
         :
         <Button className="m-2" style={{backgroundColor: "#61dafb"}} size="lg" onClick={handleAuthorizeClick}>
           Sign Into Spotify
