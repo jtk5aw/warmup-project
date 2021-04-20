@@ -50,6 +50,7 @@ export default function App() {
         'headers': {
           'Content-Type': 'application/json'
         },
+        'credentials': 'include',
         'redirect': 'follow',
         'body': JSON.stringify(postBody)
       })
@@ -88,7 +89,7 @@ export default function App() {
   // This is not permanent functionality
 
   const handleRecentlyPlayedClick = () => {
-    fetch(recentlyPlayed)
+    fetch(recentlyPlayed, { credentials: 'include' })
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -99,7 +100,7 @@ export default function App() {
   }
 
   const handleCurrentlyPlayingClick = () => {
-    fetch(currentlyPlaying) 
+    fetch(currentlyPlaying, { credentials: 'include' }) 
       .then(response => response.json())
       .then(data => {
         console.log(data);
@@ -110,7 +111,7 @@ export default function App() {
   }
 
   const handleGetAlbumClick = () => {
-    fetch(getAlbum)
+    fetch(getAlbum, {credentials: 'include' })
       .then(response => response.json())
       .then(data => {
         console.log(data);
